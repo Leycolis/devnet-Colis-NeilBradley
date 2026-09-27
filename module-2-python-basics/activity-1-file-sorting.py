@@ -1,23 +1,23 @@
 """
 Module 2 — Activity: File Sorting with os and shutil
-Student: [your name]
-Date: [date]
+Student: [Colis, Neil Bradley V.]
+Date: [09/27/26]
 
 ============================================
 WHAT DID YOU BUILD? (explain in your own words)
 ============================================
-[Paste your working script below first, then come back and explain
-it here: what does your script do, and what rule did you use to
-sort the files? e.g. by extension, by name, by date, etc.]
+[a system that cleans up a messy folder by sorting files into subfolders based on their file extensions.
+ Basically, the script looks at every file in a target directory]
 
 
 ============================================
 KEY VOCABULARY
 ============================================
-- os module:
-- shutil module:
-- file path:
-- directory:
+- os module: used to work with folders files and file paths
+- shutil module: used to move and manage files
+- file path: a path/location of a file on the computer
+- directory: other term for file name
+- extension: its a part of a file name that tells what type of file it is
 (add more as needed)
 
 
@@ -30,18 +30,35 @@ Paste the code you already wrote for this activity below.
 import os
 import shutil
 
-# --- paste your existing code here ---
+folder = input("enter the folder path: ")
+
+if os.path.exists(folder):
+    for file in os.listdir(folder):
+        file_path = os.path.join(folder, file)
+
+        if os.path.isfile(file_path):
+            extension = os.path.splitext(file)[1].lower()
+
+            if extension:
+                folder_name = extension[1:].upper() + " Files"
+                new_folder = os.path.join(folder, folder_name)
+
+                if not os.path.exists(new_folder):
+                    os.makedirs(new_folder)
+
+                shutil.move(file_path, os.path.join(new_folder, file))
+
+    print("files sorted successfully")
+else:
+    print("folder does not exist")
 
 
 """
 ============================================
 A MISTAKE I MADE (or one I want to avoid)
 ============================================
-[what tripped you up while building this? e.g. a path that didn't
-exist, a file that got overwritten, something that didn't work the
-way you expected at first]
-
-
+I need to be careful with file paths since the target folder must exist before the program can run,
+ and I also need to double‑check when moving files to avoid putting them in the wrong location.
 ============================================
 HOW THIS CONNECTS TO SOMETHING ELSE
 ============================================
