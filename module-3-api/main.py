@@ -1,32 +1,37 @@
+
 import requests
-import random 
+import random
 
-p1 = requests.get('https://pokeapi.co/api/v2/pokemon/charmander')
-p2 = requests.get('https://pokeapi.co/api/v2/pokemon/ditto')
-p3 = requests.get('https://pokeapi.co/api/v2/pokemon/squirtle')
-p4 = requests.get('https://pokeapi.co/api/v2/pokemon/blastoise')
-p5 = requests.get('https://pokeapi.co/api/v2/pokemon/caterpie')
+pokemon_list = ["charmander", "ditto", "squirtle", "blastoise", "caterpie"]
 
-name = p1.json()['name']
-height = p1.json()['height']
-weight = p1.json()['weight']
+name = random.choice(pokemon_list)
 
-name = p2.json()['name']
-height = p2.json()['height']
-weight = p2.json()['weight']
+try:
+    response = requests.get("https://pokeapi.co/api/v2/pokemon/" + name)
+    response.raise_for_status()
+    data = response.json()
 
-name = p3.json()['name']
-height = p3.json()['height']
-weight = p3.json()['weight']
+    height = data["height"] / 10
+    weight = data["weight"] / 10
 
-name = p4.json()['name']
-height = p4.json()['height']
-weight = p4.json()['weight']
+    print("Who's That Pokemon?")
+    print("Height:", height, "meters")
+    print("Weight:", weight, "kg")
 
-name = p5.json()['name']
-height = p5.json()['height']
-weight = p5.json()['weight']
+    for attempt in range(3):
+        guess = input("Guess the Pokemon: ").lower().strip()
 
-pokemon_namelist = ["charmander" , "ditto" , "squirtle" , "blastoise" , "caterpie"]
-The_name = random.choice(pokemon_namelist)
-print(The_name)
+        if guess not in pokemon_list:
+            print("Pokemon not in the list!")
+        elif guess == name:
+            print("Correct! You win!")
+            break
+        else:
+            print("Wrong guess!")
+
+    else:
+        print("Game over! It was", name.title())
+
+except requests.exceptions.RequestException:
+    print("Error connecting to PokeAPI. Check your internet.")
+
